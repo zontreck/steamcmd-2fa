@@ -21,11 +21,11 @@ struct Args {
     path: String,
 
     // Steam username
-    #[clap(short, long)]
+    #[clap(short, default_value = "")]
     username: String,
 
     // Steam password
-    #[clap(short, long)]
+    #[clap(short, default_value = "")]
     password: String,
 
     // Steam 2FA shared secret
@@ -33,21 +33,17 @@ struct Args {
     secret: String,
 
     // For raw output only
-    #[clap(short, long)]
+    #[clap(long)]
     raw: bool, // Changed from Bool to bool
 
     // Steamcmd args
-    #[clap(short, long)]
+    #[clap(short, default_value = "+quit")]
     args: String,
 }
 
 fn main() {
     let args = Args::parse();
 
-    if !std::path::Path::new(&args.path).exists() {
-        println!("Steamcmd executable not found at {}. Please specify with --path", args.path);
-        std::process::exit(1);
-    }
 
     let totp = match generate(&args.secret) {
         Ok(code) => code,
@@ -60,7 +56,23 @@ fn main() {
     if args.raw {
         println!("{}", totp); // Use println! and correct the variable name
         std::process::exit(0); // Use std::process::exit(0) to return a proper exit code
+    }else {
+        if args.password == "" {
+            println!("Password is required");
+            std::process::exit(1);
+        }
+
+        if args.username == "" {
+            println!("Username is required");
+            std::process::exit(1);
+        }
     }
+
+    if !std::path::Path::new(&args.path).exists() {
+        println!("Steamcmd executable not found at {}. Please specify with --path", args.path);
+        std::process::exit(1);
+    }
+
 
     let cmd_arg = format!("+login {} {} {} {}", &args.username, &args.password, &totp, &args.args);
 

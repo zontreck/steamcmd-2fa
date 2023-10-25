@@ -7,7 +7,7 @@ A simple tool that automatically generates a 2FA Steam Guard code and then runs 
 You can either clone this and build it yourself or use the supplied binaries for both Windows and Linux.
 
 ```bash
-git clone https://github.com/weilbyte/steamcmd-2fa
+git clone https://github.com/zontreck/steamcmd-2fa
 cd steamcmd-2fa
 cargo build
 ```
