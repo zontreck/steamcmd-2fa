@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build for Linux and Windows
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, windows-latest]
 
     steps:
     - name: Check out code
@@ -20,10 +20,12 @@ jobs:
         toolchain: stable
 
     - name: Build for Linux
+      runs-on: ubuntu-latest
       run: cargo build --release
       working-directory: ${{ github.workspace }}
 
     - name: Build for Windows
+      runs-on: windows-latest
       run: cargo build --release
       working-directory: ${{ github.workspace }}
 
