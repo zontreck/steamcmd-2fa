@@ -20,11 +20,11 @@ jobs:
         toolchain: stable
 
     - name: Build for Linux
-      run: cargo build --release --target x86_64-unknown-linux-gnu
+      run: cargo build --release
       working-directory: ${{ github.workspace }}
 
     - name: Build for Windows
-      run: cargo build --release --target x86_64-pc-windows-msvc
+      run: cargo build --release
       working-directory: ${{ github.workspace }}
 
     - name: Create Release
@@ -32,6 +32,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ./target/x86_64-unknown-linux-gnu/release/steamcmd-2fa
-          ./target/x86_64-pc-windows-msvc/release/steamcmd-2fa.exe
+          ./target/release/steamcmd-2fa
+          ./target/release/steamcmd-2fa.exe
         token: ${{ secrets.GITHUB_TOKEN }}
