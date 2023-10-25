@@ -1,0 +1,37 @@
+name: Build and Release Rust Program
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    name: Build for Linux and Windows
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+
+    - name: Build for Linux
+      run: cargo build --release --target x86_64-unknown-linux-gnu
+      working-directory: ${{ github.workspace }}
+
+    - name: Build for Windows
+      run: cargo build --release --target x86_64-pc-windows-msvc
+      working-directory: ${{ github.workspace }}
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./target/x86_64-unknown-linux-gnu/release/your_program_name
+          ./target/x86_64-pc-windows-msvc/release/your_program_name.exe
+        token: ${{ secrets.GITHUB_TOKEN }}
