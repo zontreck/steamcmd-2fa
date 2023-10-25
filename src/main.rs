@@ -1,11 +1,11 @@
 use clap::Parser;
-use simple_steam_totp::{generate};
+use simple_steam_totp::generate;
 
 fn find_default_steamcmd() -> &'static str {
     if cfg!(target_os = "windows") {
         "C:\\steamcmd\\steamcmd.exe"
     } else {
-        if (std::path::Path::new("/home/steam/steamcmd/steamcmd.sh")).exists() {
+        if std::path::Path::new("/home/steam/steamcmd/steamcmd.sh").exists() {
             "/home/steam/steamcmd/steamcmd.sh"
         } else {
             "/home/steam/steamcmd"
@@ -32,6 +32,10 @@ struct Args {
     #[clap(short, long)]
     secret: String,
 
+    // For raw output only
+    #[clap(short, long)]
+    raw: bool, // Changed from Bool to bool
+
     // Steamcmd args
     #[clap(short, long)]
     args: String,
@@ -53,11 +57,16 @@ fn main() {
         }
     };
 
+    if args.raw {
+        println!("{}", totp); // Use println! and correct the variable name
+        std::process::exit(0); // Use std::process::exit(0) to return a proper exit code
+    }
+
     let cmd_arg = format!("+login {} {} {} {}", &args.username, &args.password, &totp, &args.args);
 
     let mut cmd = std::process::Command::new(&args.path);
     cmd.arg(&cmd_arg);
-    
+
     println!("{} {:?}\n", &args.path, &cmd_arg.replace(&args.username, "****").replace(&args.password, "****").replace(&totp, "****"));
 
     std::process::exit(cmd.status().unwrap().code().unwrap());
