@@ -28,14 +28,18 @@ jobs:
     - name: Build
       run: cargo build --release
 
-    - name: Create Release
-      id: create_release
+    - name: Create Linux Release
+      if: matrix.os == 'ubuntu-latest'
+      id: create_linux_release
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          ${{ if eq(matrix.os, 'ubuntu-latest') }} # Publish Linux path
-            ./target/release/steamcmd-2fa
-          ${{ else }}                             # Publish Windows path
-            ./target/release/steamcmd-2fa.exe
-          ${{ endif }}
+        files: ./target/release/steamcmd-2fa
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Windows Release
+      if: matrix.os == 'windows-latest'
+      id: create_windows_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./target/release/steamcmd-2fa.exe
         token: ${{ secrets.GITHUB_TOKEN }}
