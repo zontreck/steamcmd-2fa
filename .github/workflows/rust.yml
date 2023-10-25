@@ -1,8 +1,9 @@
 name: Rust
 
 on:
-  push:
-    branches: [ "main" ]
+  release:
+    types:
+      - created
 
 env:
   CARGO_TERM_COLOR: always
@@ -18,10 +19,23 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v3
-      
+
     - name: Set up Rust
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
+
     - name: Build
       run: cargo build --release
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ${{ if eq(matrix.os, 'ubuntu-latest') }} # Publish Linux path
+            ./target/release/steamcmd-2fa
+          ${{ else }}                             # Publish Windows path
+            ./target/release/steamcmd-2fa.exe
+          ${{ endif }}
+        token: ${{ secrets.GITHUB_TOKEN }}
