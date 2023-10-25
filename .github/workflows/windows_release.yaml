@@ -1,4 +1,4 @@
-name: Build and Release Rust Program
+name: Build and Release Rust Program Windows
 
 on:
   release:
@@ -7,8 +7,8 @@ on:
 
 jobs:
   build:
-    name: Build for Linux and Windows
-    runs-on: [ubuntu-latest, windows-latest]
+    name: Build for Windows
+    runs-on: windows-latest
 
     steps:
     - name: Check out code
@@ -19,13 +19,7 @@ jobs:
       with:
         toolchain: stable
 
-    - name: Build for Linux
-      runs-on: ubuntu-latest
-      run: cargo build --release
-      working-directory: ${{ github.workspace }}
-
     - name: Build for Windows
-      runs-on: windows-latest
       run: cargo build --release
       working-directory: ${{ github.workspace }}
 
@@ -34,6 +28,5 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ./target/release/steamcmd-2fa
           ./target/release/steamcmd-2fa.exe
         token: ${{ secrets.GITHUB_TOKEN }}
