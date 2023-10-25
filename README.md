@@ -14,16 +14,20 @@ cargo build
 
 ## Usage
 ```
+steamcmd-2fa 0.2.0
+
 USAGE:
-    steamcmd-2fa --path <PATH> --username <USERNAME> --password <PASSWORD> --secret <SECRET> --args <ARGS>
+    steamcmd-2fa [OPTIONS] --secret <SECRET>
 
 OPTIONS:
-    -a, --args <ARGS>               Arguments to pass to steamcmd
-    -h, --help                      Print help information
-    -p, --password <PASSWORD>       Password to log in with
-        --path <PATH>               Path to steamcmd binary
-    -s, --secret <SECRET>           2FA shared_secret (must be base64 encoded)
-    -u, --username <USERNAME>       Username to log in with
+    -a <ARGS>                [default: +quit]
+    -h, --help               Print help information
+    -p <PASSWORD>            [default: ]
+        --path <PATH>        [default: /home/steam/steamcmd]
+        --raw                
+    -s, --secret <SECRET>    
+    -u <USERNAME>            [default: ]
+    -V, --version            Print version information
 ```
 
 For example, instead of running `steamcmd +login exampleuser examplepass +quit`, you would run `steamcmd-2fa --path /home/steam/steamcmd --username exampleuser --password examplepass --secret YOURSECRET --args "+quit"`. 
