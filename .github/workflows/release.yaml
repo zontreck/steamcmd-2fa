@@ -32,6 +32,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ./target/x86_64-unknown-linux-gnu/release/your_program_name
-          ./target/x86_64-pc-windows-msvc/release/your_program_name.exe
+          ./target/x86_64-unknown-linux-gnu/release/steamcmd-2fa
+          ./target/x86_64-pc-windows-msvc/release/steamcmd-2fa.exe
         token: ${{ secrets.GITHUB_TOKEN }}
